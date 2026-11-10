@@ -15,7 +15,7 @@ class RerankingAgent(Agent):
 
 		usefull_documents, usefull_metadatas = self.filter_sources(question, documents, metadatas)
 
-		prompt_system = RerankingAgent.read_file("./prompt_system/rag.txt")
+		prompt_system = RerankingAgent.read_file("./prompts_system/rag.txt")
 
 		prompt_system = prompt_system.replace("{{CHUNKS}}", "\n\t".join(usefull_documents))
 
@@ -28,7 +28,7 @@ class RerankingAgent(Agent):
 			messages=[
 				{
 					"role": "system",
-					"content": RerankingAgent.read_file(file_path="./prompt_system/reranking_agent.txt")
+					"content": RerankingAgent.read_file(file_path="./prompts_system/reranking_agent.txt")
 				},
 				{
 					"role": "user",

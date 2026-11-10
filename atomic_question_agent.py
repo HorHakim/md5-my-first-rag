@@ -13,7 +13,7 @@ class AtomicQuestionAgent(Agent):
 			messages=[
 				{
 					"role": "system",
-					"content": AtomicQuestionAgent.read_file(file_path="./prompt_system/atomic_question_agent.txt")
+					"content": AtomicQuestionAgent.read_file(file_path="./prompts_system/atomic_question_agent.txt")
 				},
 				{
 					"role": "user",
