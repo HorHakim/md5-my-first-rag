@@ -3,6 +3,7 @@ from atomic_question_agent import AtomicQuestionAgent
 from reranking_agent import RerankingAgent
 from config import LLM_MODEL
 import pandas
+import os
 
 
 class Rag(Agent):
@@ -36,22 +37,44 @@ class Rag(Agent):
 
 
 
-	def ask_rag(self, user_interaction):
-		print(f"Intraction utlisateur : {user_interaction}")
+	def ask_rag(self, user_interaction, verbose=False):
 
 		list_of_questions = self.atomic_question_agent_object.split_question_into_list_of_atomic_questions(user_interaction)
+		dict_of_questions_answers = dict()
+
 		for question in list_of_questions:
 			rag_response, documents, metadatas = self.ask_single_question(question=question)
 
-			print(f"Pour la question : {question} - voici la réponse du RAG : {rag_response}")
+			answer = dict()
+			answer["rag_response"] = rag_response
+			answer["documents"] = documents
+			answer["metadatas"] = metadatas
+
+			dict_of_questions_answers[question] = answer
+
+		if verbose:
+			Rag.show_answers(dict_of_questions_answers)
+
+		return dict_of_questions_answers
+
+
+	@staticmethod
+	def show_answers(dict_of_questions_answers):
+		os.system("clear")
+		print(f"Intraction utlisateur : {user_interaction}")
+
+		for question, answer in dict_of_questions_answers.items():
+			print(f"Pour la question : {question}\n")
+			print(f"Voici la réponse du RAG : {answer["rag_response"]}")
 			print("-"*20)
 			print(f"Voici les sources :")
-			for index_document in range(len(documents)):
-				print(f"Documents {index_document}")
-				print(documents[index_document])
-				for key, value in metadatas[index_document].items():
-					print(f"{key} : {value}")
+			for document, metadata in zip(answer["documents"], answer["metadatas"]):
+				print(document)
+				print(f"Metadatas :")
+				for key, value in metadata.items():
+					print(f"\t{key} : {value}")
 				print("---")
+			print("-"*80)
 
 
 
@@ -62,5 +85,5 @@ if __name__ == "__main__":
 	user_interaction = "Quelle est la couleur et le nom du chat de Bob ? C'est quoi Haute-Semelle ? C'est quoi une lampe à silence ? C'est quoi un livre oreiller ? C'est quoi un peigne-thermomètre"
 
 	rag_object = Rag(vector_db_path=vector_db_path, corpus_df=corpus_df)
-	rag_object.ask_rag(user_interaction=user_interaction)
+	rag_object.ask_rag(user_interaction=user_interaction, verbose=True)
 
