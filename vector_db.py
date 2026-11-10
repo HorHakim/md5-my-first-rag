@@ -66,7 +66,7 @@ class VectorDB:
 
 
 
-	def retrieve(self, question, n=3):
+	def retrieve(self, question, n=20):
 		embedded_question = self.get_embeddings([question])
 
 		collection = self.chroma_vector_db.get_collection("rag_knowledge")
