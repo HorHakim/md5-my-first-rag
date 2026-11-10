@@ -1,12 +1,12 @@
 from agent import Agent
 from config import LLM_MODEL
-
+import pandas
 from vector_db import VectorDB
 
 class Rag(Agent):
-	def __init__(self, vector_db_path):
+	def __init__(self, vector_db_path, corpus_df=None):
 		super().__init__()
-		self.vector_db_object = VectorDB(vector_db_path=vector_db_path)
+		self.vector_db_object = VectorDB(vector_db_path=vector_db_path, corpus_df=corpus_df)
 
 
 
@@ -43,9 +43,9 @@ class Rag(Agent):
 
 
 if __name__ == "__main__":
-	vector_db_path="my_vector_db"
-
-	rag_object = Rag(vector_db_path=vector_db_path)
+	vector_db_path = "my_vector_db"
+	corpus_df = pandas.read_csv("05_corpus_rag.csv")
+	rag_object = Rag(vector_db_path=vector_db_path, corpus_df=corpus_df)
 
 	rag_response, documents, metadatas = rag_object.ask_rag(question="Quelle est la couleur et le nom du chat de Bob ?")
 

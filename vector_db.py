@@ -7,12 +7,15 @@ import pandas
 
 class VectorDB:
 	def __init__(self, vector_db_path="", corpus_df=None):
+	
 		if os.path.exists(vector_db_path):
 			self.load_vector_db(vector_db_path)
 
-
 		elif not corpus_df.empty:
 			self.create_vector_db(vector_db_path, corpus_df)
+
+		else:
+			raise(Exception("Can't read or create vector db"))
 
 
 	def load_vector_db(self, vector_db_path):
@@ -47,7 +50,7 @@ class VectorDB:
 			ids = list(corpus_df["id"].values),
 			documents=chuncks,
 			embeddings=embeddings,
-			metadatas=[{"source": row["source"] , "category": row["categorie"]} for _, row in corpus_df.iterrows()]
+			metadatas=[{"source": row["source"] , "category": row["categorie"], "index_chunk": row["id"]} for _, row in corpus_df.iterrows()]
 			)
 
 
