@@ -2,15 +2,14 @@ from agent import Agent
 from atomic_question_agent import AtomicQuestionAgent
 from reranking_agent import RerankingAgent
 from config import LLM_MODEL
-import pandas
 import os
 
 
 class Rag(Agent):
-	def __init__(self, vector_db_path, corpus_df=None):
+	def __init__(self, vector_db_path, corpus_path=""):
 		super().__init__()
 		self.atomic_question_agent_object = AtomicQuestionAgent()
-		self.reranking_agent_object = RerankingAgent(vector_db_path, corpus_df=None)
+		self.reranking_agent_object = RerankingAgent(vector_db_path, corpus_path)
 
 
 	def ask_single_question(self, question):
@@ -80,10 +79,10 @@ class Rag(Agent):
 
 if __name__ == "__main__":
 	vector_db_path = "my_vector_db"
-	corpus_df = pandas.read_csv("05_corpus_rag.csv")
+	corpus_path = "05_corpus_rag.csv"
 
 	user_interaction = "Quelle est la couleur et le nom du chat de Bob ? C'est quoi Haute-Semelle ? C'est quoi une lampe à silence ? C'est quoi un livre oreiller ? C'est quoi un peigne-thermomètre"
 
-	rag_object = Rag(vector_db_path=vector_db_path, corpus_df=corpus_df)
+	rag_object = Rag(vector_db_path=vector_db_path, corpus_path=corpus_path)
 	rag_object.ask_rag(user_interaction=user_interaction, verbose=True)
 

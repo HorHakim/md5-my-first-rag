@@ -5,9 +5,9 @@ from vector_db import VectorDB
 import json
 
 class RerankingAgent(Agent):
-	def __init__(self, vector_db_path, corpus_df=None):
+	def __init__(self, vector_db_path, corpus_path=None):
 		super().__init__()
-		self.vector_db_object = VectorDB(vector_db_path=vector_db_path, corpus_df=corpus_df)
+		self.vector_db_object = VectorDB(vector_db_path=vector_db_path, corpus_path=corpus_path)
 
 
 	def build_rag_context(self, question):

@@ -6,13 +6,13 @@ import os
 import pandas
 
 class VectorDB:
-	def __init__(self, vector_db_path="", corpus_df=None):
+	def __init__(self, vector_db_path="", corpus_path=""):
 	
 		if os.path.exists(vector_db_path):
 			self.load_vector_db(vector_db_path)
 
-		elif not corpus_df.empty:
-			self.create_vector_db(vector_db_path, corpus_df)
+		elif os.path.exists(corpus_path):
+			self.create_vector_db(vector_db_path, corpus_path)
 
 		else:
 			raise(Exception("Can't read or create vector db"))
@@ -29,7 +29,15 @@ class VectorDB:
 			raise(Exception("Error : we miss the embeddings model's name information"))
 
 	
-	def create_vector_db(self, vector_db_path, corpus_df):
+	def create_vector_db(self, vector_db_path, corpus_path):
+		try :
+			corpus_df = pandas.read_csv(corpus_path)
+		except:
+			raise(Exception("We can't create a vector db with an corrupted ressource (csv of chunks)"))
+
+		if corpus_df.empty:
+			raise(Exception("We can't create a vector db with an empty ressource (csv of chunks)"))
+
 		print("Creating Vector DB")
 		self.sentence_transformers_object = SentenceTransformer(EMBEDDING_MODEL)
 
@@ -79,10 +87,10 @@ class VectorDB:
 
 if __name__ == "__main__":
 	vector_db_path="my_vector_db"
-	
-	corpus_df=pandas.read_csv("05_corpus_rag.csv")
+	corpus_path = "05_corpus_rag.csv"
 
-	vector_db_object = VectorDB(vector_db_path, corpus_df)
+
+	vector_db_object = VectorDB(vector_db_path, corpus_path)
 
 
 	print(vector_db_object.retrieve(question="Quelle est la coleur et le nom du chat de Bob ?"))
