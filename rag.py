@@ -39,6 +39,7 @@ class Rag(Agent):
 	def ask_rag(self, user_interaction, verbose=False):
 
 		list_of_questions = self.atomic_question_agent_object.split_question_into_list_of_atomic_questions(user_interaction)
+
 		dict_of_questions_answers = dict()
 
 		for question in list_of_questions:
@@ -60,7 +61,9 @@ class Rag(Agent):
 	@staticmethod
 	def show_answers(dict_of_questions_answers):
 		os.system("clear")
+
 		print(f"Intraction utlisateur : {user_interaction}")
+
 
 		for question, answer in dict_of_questions_answers.items():
 			print(f"Pour la question : {question}\n")
@@ -81,8 +84,12 @@ if __name__ == "__main__":
 	vector_db_path = "my_vector_db"
 	corpus_path = "05_corpus_rag.csv"
 
-	user_interaction = "Quelle est la couleur et le nom du chat de Bob ? C'est quoi Haute-Semelle ? C'est quoi une lampe à silence ? C'est quoi un livre oreiller ? C'est quoi un peigne-thermomètre"
 
 	rag_object = Rag(vector_db_path=vector_db_path, corpus_path=corpus_path)
+	user_interaction = "Quelle est la couleur et le nom du chat de Bob ? C'est quoi Haute-Semelle ? C'est quoi une lampe à silence ? C'est quoi un livre oreiller ? C'est quoi un peigne-thermomètre"
 	rag_object.ask_rag(user_interaction=user_interaction, verbose=True)
+	
+
+
+
 
