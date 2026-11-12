@@ -38,6 +38,7 @@ class RerankingAgent(Agent):
 			temperature=0,
 			model=LLM_MODEL, 
 			response_format={"type": "json_object"},
+			max_completion_tokens=10_000
 		)
 
 		reraking_agent_response = json.loads(chat_completion.choices[0].message.content)
