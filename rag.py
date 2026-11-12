@@ -1,4 +1,5 @@
 from agent import Agent
+from moderator_agent import ModeratorAgent
 from atomic_question_agent import AtomicQuestionAgent
 from reranking_agent import RerankingAgent
 from config import LLM_MODEL
@@ -8,6 +9,7 @@ import os
 class Rag(Agent):
 	def __init__(self, vector_db_path, corpus_path=""):
 		super().__init__()
+		self.moderator_agent_object = ModeratorAgent()
 		self.atomic_question_agent_object = AtomicQuestionAgent()
 		self.reranking_agent_object = RerankingAgent(vector_db_path, corpus_path)
 
@@ -37,6 +39,9 @@ class Rag(Agent):
 
 
 	def ask_rag(self, user_interaction, verbose=False):
+		is_legitimate, justification = self.moderator_agent_object.moderate_user_interaction(user_interaction)
+		if not is_legitimate:
+			raise(Exception(f"Prompt Injection : {justification}"))
 
 		list_of_questions = self.atomic_question_agent_object.split_question_into_list_of_atomic_questions(user_interaction)
 
